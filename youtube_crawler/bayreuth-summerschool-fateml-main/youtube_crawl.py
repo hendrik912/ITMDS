@@ -15,7 +15,7 @@ from selenium.webdriver.support import expected_conditions as EC
 NUMBER_OF_PATHS_TO_COLLECT_PER_KEYWORD = 20
 NUMBER_OF_SEARCH_RESULTS_TO_CONSIDER = 10
 NUMBER_OF_RELATED_VIDEOS_TO_CONSIDER = 10
-NUMBER_OF_RELATED_VIDEOS_TO_VISIT_DEPTH = 4
+NUMBER_OF_RELATED_VIDEOS_TO_VISIT_DEPTH = 4  # number of recommendations that are collected
 
 # keywords which are used
 keywords = [
@@ -56,20 +56,40 @@ for keyword in keywords:
       # open url
       driver.get( current_url )
 
+      # ------------------------
+
+      # Accept cookies
+      try:
+        cookies_button = WebDriverWait(driver, 10).until(
+          EC.element_to_be_clickable((By.XPATH, '//button[contains(.,"Alle akzeptieren")]'))
+        )
+        cookies_button.click()
+      except Exception as e:
+        print("Cookies button not found or could not be clicked:", str(e))
+
+      # ------------------------
+
       # wait until YouTube is fully loaded
-      myElem = WebDriverWait( driver, 10000 ).until( EC.presence_of_element_located((By.ID, 'comments')))
+      myElem = WebDriverWait( driver, 100000 ).until( EC.presence_of_element_located((By.ID, 'comments')))
 
       # prepare filname to save file
       filename = current_url.replace(":","_").replace("/","_").replace(".","_").replace("?","_").replace("=","_")
-      filename = filename[-31:]
-      filepath = 'crawled_pages/' + filename + ".html" 
+
+      len_fn = len("results_search_query_") + len(keyword)
+      filename = filename[-len_fn:]
+      # filename = filename[-32:]
+      filepath = 'crawled_pages/' + filename + ".html"
+
+      print("-"*20)
+      print(filename)
+
 
       if not os.path.isfile( filepath ):
         with open( filepath, 'w', encoding='utf8' ) as f:
           f.write( driver.page_source )
 
       # collect top recommendations
-      results_elements = [ [elem.text, elem.get_attribute("href")] for elem in driver.find_elements_by_id("video-title") if elem.text and elem.get_attribute("href") ]
+      results_elements = [ [elem.text, elem.get_attribute("href")] for elem in driver.find_elements(By.ID, "video-title") if elem.text and elem.get_attribute("href") ]
 
       selected_element_i = select_random_video( results_elements )
       selected_element = results_elements[ selected_element_i ]
@@ -100,9 +120,11 @@ for keyword in keywords:
           with open( filepath, 'w', encoding='utf8' ) as f:
             f.write( driver.page_source )
 
-        related_elements = driver.find_elements_by_id("related")[0]
+        related_elements = driver.find_elements(By.ID, "related")[0]
 
-        related_elements_links = [ [elem.text, elem.get_attribute("href")] for elem in related_elements.find_elements_by_class_name("yt-simple-endpoint") if check_link( elem.text, elem.get_attribute("href") ) ]
+        related_elements_links = [ [elem.text, elem.get_attribute("href")] for elem in related_elements.find_elements(By.CLASS_NAME, "yt-simple-endpoint")
+                                   if check_link( elem.text, elem.get_attribute("href") ) ]
+
 
         selected_element_i = select_random_video( related_elements_links )
         selected_element = related_elements_links[ selected_element_i ]
@@ -122,3 +144,4 @@ for keyword in keywords:
       pass
 
     driver.close()
+#%%
