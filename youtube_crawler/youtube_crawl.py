@@ -60,7 +60,7 @@ for keyword in keywords:
 
       # Accept cookies
       try:
-        cookies_button = WebDriverWait(driver, 10).until(
+        cookies_button = WebDriverWait(driver, 10000).until(
           EC.element_to_be_clickable((By.XPATH, '//button[contains(.,"Alle akzeptieren")]'))
         )
         cookies_button.click()
@@ -70,7 +70,7 @@ for keyword in keywords:
       # ------------------------
 
       # wait until YouTube is fully loaded
-      myElem = WebDriverWait( driver, 100000 ).until( EC.presence_of_element_located((By.ID, 'comments')))
+      myElem = WebDriverWait( driver, 10000 ).until( EC.presence_of_element_located((By.ID, 'comments')))
 
       # prepare filname to save file
       filename = current_url.replace(":","_").replace("/","_").replace(".","_").replace("?","_").replace("=","_")
@@ -80,15 +80,10 @@ for keyword in keywords:
       # filename = filename[-32:]
       filepath = 'crawled_pages/' + filename + ".html"
 
-      print("-"*20)
-      print(filename)
-
-
       if not os.path.isfile( filepath ):
         with open( filepath, 'w', encoding='utf8' ) as f:
           f.write( driver.page_source )
 
-      # collect top recommendations
       results_elements = [ [elem.text, elem.get_attribute("href")] for elem in driver.find_elements(By.ID, "video-title") if elem.text and elem.get_attribute("href") ]
 
       selected_element_i = select_random_video( results_elements )
@@ -125,9 +120,13 @@ for keyword in keywords:
         related_elements_links = [ [elem.text, elem.get_attribute("href")] for elem in related_elements.find_elements(By.CLASS_NAME, "yt-simple-endpoint")
                                    if check_link( elem.text, elem.get_attribute("href") ) ]
 
-
-        selected_element_i = select_random_video( related_elements_links )
-        selected_element = related_elements_links[ selected_element_i ]
+        try:
+          selected_element_i = select_random_video( related_elements_links )
+          selected_element = related_elements_links[ selected_element_i ]
+        except Exception as e:
+          print(e)
+          j -= 1
+          continue
 
         elem_text = selected_element[ 0 ]
         elem_href = selected_element[ 1 ]
