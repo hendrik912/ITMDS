@@ -1,9 +1,7 @@
 
-__pycache__/
-data/
 
-geckodriver.log
-crawling_paths.csv
+__pycache__/
+results/
 
 .idea/
 
@@ -11,4 +9,5 @@ crawling_paths.csv
 .ipynb_checkpoints
 
 *.jpg
-*.png
+
+.env
