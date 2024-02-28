@@ -2,8 +2,8 @@
 
 Author: Hendrik Eilts
 
-This code was created for the module "IT-management and Data Science" for our 'paper' with the title "Examining polarization on YouTube through personalized "sock
-puppet" audits"
+This code was created for the module "IT-management and Data Science" for our 'paper' with the title "Examining polarization on YouTube through personalized 'sock
+puppet' audits"
 
 There 3 three main files:
 
