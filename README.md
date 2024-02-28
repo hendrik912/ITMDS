@@ -13,7 +13,7 @@ In this file the generation of YouTube search queries is performed
 
 ### data_collection.py
 
-Using the previously generated queries, data_collection.py performs the collection of data using a webcrawler based on https://gitlab.informatik.uni-bremen.de/hheuer/ratml
+Using the previously generated queries, data_collection.py performs the collection of data using a webcrawler based on https://gitlab.informatik.uni-bremen.de/hheuer/ratml 
 Adding modifications to accept cookies, automated scrolling so the content is loaded, as well as loading the transcript (repeated presses on buttons)
 
 ### data_analysis.ipynb
