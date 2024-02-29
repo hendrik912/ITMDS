@@ -23,4 +23,4 @@ followed by plotting the results.
 
 
 
-The required libraries for creating a virtual environment are requirements.txt
+The required libraries for creating a virtual environment are given by requirements.txt
