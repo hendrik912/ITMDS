@@ -1,3 +1,9 @@
+
+In this project, I built upon a youtube webcrawler in order to information such as video transcripts. 
+The navigation is dependent on the behavior of an artifical persona realised using the Large Language Model Mistral to generate search queries.
+The data analysis (e.g. sentiment analysis) is performed a LLM in a few shot learning approach. 
+
+
 ## IT-management and Data Science 
 
 Author: Hendrik Eilts
